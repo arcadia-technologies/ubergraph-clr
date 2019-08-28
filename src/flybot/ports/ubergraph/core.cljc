@@ -347,16 +347,14 @@ will `upgrade' the directed edge to undirected and merge attributes."
 
 (defn- submap? [m1 m2]
   #?(:clj (every? identity (for [[k v] m1] (= (get m2 k) v)))
-     :cljr (and ;; seems about 10 times faster
-             (<= (count m1) (count m2))
-             (reduce-kv
-               (fn [_ k v]
-                 (or (identical? :src k) ;; means we don't have to do the dissoc thing upstream
-                     (identical? :dest k)
-                     (= (get m2 k) v)
-                     (reduced false)))
-               true
-               m1))))
+     :cljr (reduce-kv ;; seems about 10 times faster
+             (fn [_ k v]
+               (or (identical? :src k) ;; means we don't have to do the dissoc thing upstream
+                   (identical? :dest k)
+                   (= (get m2 k) v)
+                   (reduced false)))
+             true
+             m1)))
 
 (defn- find-edges-impl
   ([g src dest]
