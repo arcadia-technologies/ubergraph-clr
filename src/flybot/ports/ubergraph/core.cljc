@@ -891,24 +891,24 @@ Additionally map can contain graph attributes for graphviz like :bgcolor, :label
        auto-label :auto-label
        :as opts
        :or {layout :dot}}]
-    (let [g (if auto-label (label g) g)
-          ns (nodes g),
-          es (edges g)
-          nodes (for [n ns]
-                  [(dotid n)
-                   (sanitize-attrs g n)]),
-          directed-edges (for [e es :when (directed-edge? e)]
-                           [(dotid (src e)) (dotid (dest e)) (sanitize-attrs g e)])
-          undirected-edges (for [e es :when (and (undirected-edge? e)
-                                                 (not (mirror-edge? e)))]
-                             [(dotid (src e)) (dotid (dest e))
-                              (merge {:dir :none} (sanitize-attrs g e))])]
-      (-> (concat [(merge {:layout layout} (dissoc opts :layout :save :auto-label))]
-                  nodes directed-edges undirected-edges)
-        d/digraph
-        d/dot
-        dclr/show
-        ;; (cond->
-        ;;   save (d/save! filename {:format format})
-        ;;   (not save) d/show!)
-        ))))
+   (let [g (if auto-label (label g) g)
+         ns (nodes g),
+         es (edges g)
+         nodes (for [n ns]
+                 [(dotid n)
+                  (sanitize-attrs g n)]),
+         directed-edges (for [e es :when (directed-edge? e)]
+                          [(dotid (src e)) (dotid (dest e)) (sanitize-attrs g e)])
+         undirected-edges (for [e es :when (and (undirected-edge? e)
+                                                (not (mirror-edge? e)))]
+                            [(dotid (src e)) (dotid (dest e))
+                             (merge {:dir :none} (sanitize-attrs g e))])]
+     (-> (concat [(merge {:layout layout} (dissoc opts :layout :save :auto-label))]
+           nodes directed-edges undirected-edges)
+         d/digraph
+         d/dot
+         (dclr/show {:alg "C:\\Program Files\\Graphviz-2.38\\release\\bin\\dot.exe"})
+         ;; (cond->
+         ;;   save (d/save! filename {:format format})
+         ;;   (not save) d/show!)
+         ))))
