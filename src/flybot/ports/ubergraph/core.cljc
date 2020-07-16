@@ -907,7 +907,8 @@ Additionally map can contain graph attributes for graphviz like :bgcolor, :label
            nodes directed-edges undirected-edges)
          d/digraph
          d/dot
-         (dclr/show {:alg "C:\\Program Files\\Graphviz-2.38\\release\\bin\\dot.exe"})
+         (dclr/show (-> {:alg "C:\\Program Files\\Graphviz-2.38\\release\\bin\\dot.exe"}
+                        (merge (select-keys opts [:path :format]))))
          ;; (cond->
          ;;   save (d/save! filename {:format format})
          ;;   (not save) d/show!)
